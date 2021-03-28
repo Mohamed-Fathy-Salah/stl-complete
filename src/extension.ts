@@ -1,18 +1,15 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
 
+
+import * as vscode from 'vscode';
+import fetch from "node-fetch";
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	//console.log('Congratulations, your extension "helloworld" is now active!');
-
-	
 	let disposable = vscode.workspace.onDidChangeTextDocument(
-		() => {
+		async () => {
 		
 		const editor = vscode.window.activeTextEditor;
 		if(!editor)
@@ -21,27 +18,42 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		const text = editor.document.getText();
-
 		var cords = editor.selection.active;
 		var row = cords.line;
 		var col = cords.character;
+
+		//getting the active line in editor
+		let newText = editor.document.lineAt(row).text;
+
+		//making a range
+		let range = new vscode.Range(row, 0 ,row, col+1);
+
+		//displaying cordinates and the character written in edtior
 		console.log(row, col);
-		var ind =0;
-		var t = text;
-		let x = row > 0;
+		console.log(newText.charAt(col));
+
+		//fetching data from api for testing
+		const response = await fetch(
+			'https://api.datamuse.com/words?ml='+newText.replace(" ","+")
+			);
+		const data = await response.json();
+
+		//creating a quick pick menu to to replace a range in editor by a chosen word
+		const quickPick = vscode.window.createQuickPick();
+		quickPick.items = data.map( (x:any) => ({label: x.word}) );
 		
-		while(row--)
-			ind = text.indexOf('\n',ind+1);
-		
-		if(x) ind++;
-		let newText = text.substr(ind);
+		quickPick.onDidChangeSelection(([item]) => {
+			if (item) 
+				editor.edit((edit) => {
+					//replacing a range by a word
+					edit.replace(range, item.label);
+				})
+				quickPick.dispose();
+			
+		});
 
-		console.log(newText[col]);
-
-		//vscode.window.showInformationMessage(t);
-
-		//console.log(t);
+		quickPick.onDidHide(() => quickPick.dispose());
+		quickPick.show(); 
 	});
 	
 	context.subscriptions.push(disposable);
