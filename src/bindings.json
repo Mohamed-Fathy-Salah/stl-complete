@@ -11,11 +11,11 @@
 		"value": "list",
 		"number": 1
 	},
-	"k": {
+	"t": {
 		"value": "stack",
 		"number": 1
 	},
-	"t": {
+	"e": {
 		"value": "set",
 		"number": 1
 	},
@@ -23,7 +23,7 @@
 		"value": "unordered_map",
 		"number": 2
 	},
-	"ut": {
+	"ue": {
 		"value": "unordered_set",
 		"number": 1
 	},
@@ -55,7 +55,7 @@
 		"value": "float",
 		"number": 0
 	},
-	"string": {
+	"s": {
 		"value": "string",
 		"number": 0
 	},
