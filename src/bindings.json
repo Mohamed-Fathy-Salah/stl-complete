@@ -1,0 +1,12 @@
+{
+		"v":{
+			"value":"vector",
+			"number":1,
+			"prefix":"v"
+		}
+		,"s":{
+			"value":"string",
+			"number":0,
+			"prefix":"s"
+		}
+}

@@ -2,62 +2,56 @@
 // Import the module and reference it with the alias vscode in your code below
 
 
-import * as vscode from 'vscode';
-import fetch from "node-fetch";
+import vscode from 'vscode';
+import arr from "./bindings.json";
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
+//https://github.com/microsoft/vscode-extension-samples/blob/main/completions-sample/src/extension.ts
 export function activate(context: vscode.ExtensionContext) {
-
-	let disposable = vscode.workspace.onDidChangeTextDocument(
-		async () => {
-		
-		const editor = vscode.window.activeTextEditor;
-		if(!editor)
-		{
-			vscode.window.showWarningMessage("no editor");
-			return;
+	console.clear();
+	console.log("-------");
+	console.log(conv("vvvs"));
+	const provider1 = vscode.languages.registerCompletionItemProvider('cpp', {
+		provideCompletionItems(document, position, token) {
+				const ci = new vscode.CompletionItem('vector<int>'); 
+				return [ci];
 		}
-
-		var cords = editor.selection.active;
-		var row = cords.line;
-		var col = cords.character;
-
-		//getting the active line in editor
-		let newText = editor.document.lineAt(row).text;
-
-		//making a range
-		let range = new vscode.Range(row, 0 ,row, col+1);
-
-		//displaying cordinates and the character written in edtior
-		console.log(row, col);
-		console.log(newText.charAt(col));
-
-		//fetching data from api for testing
-		const response = await fetch(
-			'https://api.datamuse.com/words?ml='+newText.replace(" ","+")
-			);
-		const data = await response.json();
-
-		//creating a quick pick menu to to replace a range in editor by a chosen word
-		const quickPick = vscode.window.createQuickPick();
-		quickPick.items = data.map( (x:any) => ({label: x.word}) );
-		
-		quickPick.onDidChangeSelection(([item]) => {
-			if (item) 
-				editor.edit((edit) => {
-					//replacing a range by a word
-					edit.replace(range, item.label);
-				})
-				quickPick.dispose();
-			
-		});
-
-		quickPick.onDidHide(() => quickPick.dispose());
-		quickPick.show(); 
 	});
-	
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(provider1);
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
+
+/*
+this method convert symbols to its mapping
+sample input : "mviplld"
+sample output: "map<vector<int>,pair<long long,double>>"
+*/
+function conv (str:string):string{
+	let ret =[""];
+	let stack = [];
+	let i = 0;
+	while(i<str.length){
+		while(i<str.length && !(ret[ret.length-1] in arr))ret[ret.length-1]+=str[i++];
+		let cur = ret[ret.length-1] as keyof typeof arr;
+		if(!(cur in arr))return "";
+		let n= arr[cur].number;
+		ret[ret.length-1] =arr[cur].value;
+		if(n){
+			ret.push('<');
+			stack.push(n);
+		}else if(stack.length){
+			while(stack.length && stack[stack.length-1]==1){
+				stack.pop();
+				ret.push('>');
+			}
+			if(stack.length && stack[stack.length-1] ==2){
+				stack[stack.length-1]--;
+				ret.push(',');
+			}
+		}
+		ret.push("");
+	}
+	return ret.join("")+'>'.repeat(stack.length);
+}
