@@ -10,11 +10,16 @@ import arr from "./bindings.json";
 export function activate(context: vscode.ExtensionContext) {
 	const provider1 = vscode.languages.registerCompletionItemProvider('cpp', {
 		provideCompletionItems(document, position, token) {
-				//str = conv(token);
-				let str = conv("mldmii");
-				console.clear();
-				console.log(str);
-				return [new vscode.CompletionItem(str)];
+				//todo :str = conv(token);
+				let end = position.character;
+				let start = end-1;
+				let line = document.lineAt(position.line).text; 
+				while(start>0 && line[start]>='a'&&line[start]<='z')start--;
+				if(line[start] <'a'||line[start]>'z')start++;
+				let str = line.substring(start,end);
+				// console.clear();
+				// console.log(conv(str));
+				return [new vscode.CompletionItem(conv(str))];
 		}
 	});
 	context.subscriptions.push(provider1);
