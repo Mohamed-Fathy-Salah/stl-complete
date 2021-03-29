@@ -8,13 +8,13 @@ import arr from "./bindings.json";
 // your extension is activated the very first time the command is executed
 //https://github.com/microsoft/vscode-extension-samples/blob/main/completions-sample/src/extension.ts
 export function activate(context: vscode.ExtensionContext) {
-	console.clear();
-	console.log("-------");
-	console.log(conv("vvvs"));
 	const provider1 = vscode.languages.registerCompletionItemProvider('cpp', {
 		provideCompletionItems(document, position, token) {
-				const ci = new vscode.CompletionItem('vector<int>'); 
-				return [ci];
+				//str = conv(token);
+				let str = conv("mldmii");
+				console.clear();
+				console.log(str);
+				return [new vscode.CompletionItem(str)];
 		}
 	});
 	context.subscriptions.push(provider1);
