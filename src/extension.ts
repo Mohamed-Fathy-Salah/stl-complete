@@ -10,7 +10,6 @@ let dontexpand = file.dontExpand;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 //https://github.com/microsoft/vscode-extension-samples/blob/main/completions-sample/src/extension.ts
-let x = -1;
 export function activate(context: vscode.ExtensionContext) {
 
 	const provider1 = vscode.languages.registerCompletionItemProvider('cpp', {
@@ -26,16 +25,12 @@ export function activate(context: vscode.ExtensionContext) {
 			// console.log("---" + conv(str));
 			const comp = new vscode.CompletionItem(conv(str));
 			comp.kind = vscode.CompletionItemKind.Class;
-			comp.preselect = true;
-			comp.commitCharacters = ['.'];
+			// todo :make comp appear at the top of the completion items
 			//true means that the array is not complete so it gotta be modified on the fly
 			return new CompletionList([comp],true);
 		}
 	});
 	context.subscriptions.push(provider1);
-	// context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(()=>{
-	// 	console.log("---shit");
-	// }));
 }
 
 // this method is called when your extension is deactivated
@@ -53,7 +48,7 @@ function conv(str: string): string {
 	while (i < str.length) {
 		while (i < str.length && !(ret[ret.length - 1] in bindings)) ret[ret.length - 1] += str[i++];
 		let cur = ret[ret.length - 1] as keyof typeof bindings;
-		if (!(cur in bindings)) return "";
+		if (!(cur in bindings) || (ret.length>1 && stack.length == 0)) return "";
 		let n = bindings[cur].number;
 		if(cur in dontexpand)ret[ret.length-1] = cur;
 		else ret[ret.length - 1] = bindings[cur].value;
