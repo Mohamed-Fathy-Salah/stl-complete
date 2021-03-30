@@ -1,74 +1,77 @@
 {
-	"v": {
-		"value": "vector",
-		"number": 1
+	"bindings": {
+		"v": {
+			"value": "vector",
+			"number": 1
+		},
+		"m": {
+			"value": "map",
+			"number": 2
+		},
+		"li": {
+			"value": "list",
+			"number": 1
+		},
+		"St": {
+			"value": "stack",
+			"number": 1
+		},
+		"Se": {
+			"value": "set",
+			"number": 1
+		},
+		"um": {
+			"value": "unordered_map",
+			"number": 2
+		},
+		"ue": {
+			"value": "unordered_set",
+			"number": 1
+		},
+		"q": {
+			"value": "queue",
+			"number": 1
+		},
+		"r": {
+			"value": "priority_queue",
+			"number": 1
+		},
+		"p": {
+			"value": "pair",
+			"number": 2
+		},
+		"i": {
+			"value": "int",
+			"number": 0
+		},
+		"ll": {
+			"value": "long long",
+			"number": 0
+		},
+		"d": {
+			"value": "double",
+			"number": 0
+		},
+		"f": {
+			"value": "float",
+			"number": 0
+		},
+		"s": {
+			"value": "string",
+			"number": 0
+		},
+		"b": {
+			"value": "bool",
+			"number": 0
+		},
+		"c": {
+			"value": "char",
+			"number": 0
+		},
+		"ld": {
+			"value": "long double",
+			"number": 0
+		}
 	},
-	"m": {
-		"value": "map",
-		"number": 2
-	},
-	"li": {
-		"value": "list",
-		"number": 1
-	},
-	"t": {
-		"value": "stack",
-		"number": 1
-	},
-	"e": {
-		"value": "set",
-		"number": 1
-	},
-	"um": {
-		"value": "unordered_map",
-		"number": 2
-	},
-	"ue": {
-		"value": "unordered_set",
-		"number": 1
-	},
-	"q": {
-		"value": "queue",
-		"number": 1
-	},
-	"r": {
-		"value": "priority_queue",
-		"number": 1
-	},
-	"p": {
-		"value": "pair",
-		"number": 2
-	},
-	"i": {
-		"value": "int",
-		"number": 0
-	},
-	"ll": {
-		"value": "long long",
-		"number": 0
-	},
-	"d": {
-		"value": "double",
-		"number": 0
-	},
-	"f": {
-		"value": "float",
-		"number": 0
-	},
-	"s": {
-		"value": "string",
-		"number": 0
-	},
-	"b": {
-		"value": "bool",
-		"number": 0
-	},
-	"c": {
-		"value": "char",
-		"number": 0
-	},
-	"ld": {
-		"value": "long double",
-		"number": 0
-	}
+	"dontExpand": {}
 }

@@ -2,8 +2,11 @@
 // Import the module and reference it with the alias vscode in your code below
 
 
-import vscode, { CompletionItem } from 'vscode';
-import arr from "./bindings.json";
+import vscode, {CompletionList} from 'vscode';
+import file from "./bindings.json";
+
+let bindings = file.bindings;
+let dontexpand = file.dontExpand;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 //https://github.com/microsoft/vscode-extension-samples/blob/main/completions-sample/src/extension.ts
@@ -20,12 +23,13 @@ export function activate(context: vscode.ExtensionContext) {
 			if (line[start] < 'a' || line[start] > 'z') start++;
 			let str = line.substring(start, end);
 			// console.clear();
-			console.log("---" + conv(str));
+			// console.log("---" + conv(str));
 			const comp = new vscode.CompletionItem(conv(str));
-			return [comp];
-		}, resolveCompletionItem(item, token) {
-			console.log("---there");
-			return item;
+			comp.kind = vscode.CompletionItemKind.Class;
+			comp.preselect = true;
+			comp.commitCharacters = ['.'];
+			//true means that the array is not complete so it gotta be modified on the fly
+			return new CompletionList([comp],true);
 		}
 	});
 	context.subscriptions.push(provider1);
@@ -47,11 +51,12 @@ function conv(str: string): string {
 	let stack = [];
 	let i = 0;
 	while (i < str.length) {
-		while (i < str.length && !(ret[ret.length - 1] in arr)) ret[ret.length - 1] += str[i++];
-		let cur = ret[ret.length - 1] as keyof typeof arr;
-		if (!(cur in arr)) return "";
-		let n = arr[cur].number;
-		ret[ret.length - 1] = arr[cur].value;
+		while (i < str.length && !(ret[ret.length - 1] in bindings)) ret[ret.length - 1] += str[i++];
+		let cur = ret[ret.length - 1] as keyof typeof bindings;
+		if (!(cur in bindings)) return "";
+		let n = bindings[cur].number;
+		if(cur in dontexpand)ret[ret.length-1] = cur;
+		else ret[ret.length - 1] = bindings[cur].value;
 		if (n) {
 			ret.push('<');
 			stack.push(n);
